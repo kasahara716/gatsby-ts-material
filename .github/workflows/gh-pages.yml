@@ -1,0 +1,33 @@
+name: Gatsby GitHubPages Publish
+
+on:
+    push:
+        branches: [master]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+            - uses: actions/checkout@v2
+
+            # Runs a single command using the runners shell
+            - name: setup node
+              uses: actions/setup-node@v1
+              with:
+                  node-version: '10.x'
+
+            - name: install
+              run: yarn install
+
+            - name: format
+              run: yarn format
+
+            - name: build
+              run: yarn build
+
+            - name: deploy
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+                  publish_dir: ./public
